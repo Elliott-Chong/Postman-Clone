@@ -1,7 +1,12 @@
 import React from "react";
 import { TrashIcon } from "@heroicons/react/20/solid";
 
-const KeyValuePair = ({ header, removeHeader, updateHeader }) => {
+const KeyValuePair = ({
+  header,
+  removeHeader,
+  updateHeader,
+  readOnly = false,
+}) => {
   const handleChange = (e) => {
     updateHeader(header.id, e.target.name, e.target.value);
   };
@@ -10,6 +15,7 @@ const KeyValuePair = ({ header, removeHeader, updateHeader }) => {
     <form className="flex gap-4 justify-center">
       <input
         type="text"
+        readOnly={readOnly}
         onChange={handleChange}
         value={header.key}
         name="key"
@@ -18,18 +24,21 @@ const KeyValuePair = ({ header, removeHeader, updateHeader }) => {
       />
       <input
         type="text"
+        readOnly={readOnly}
         onChange={handleChange}
         value={header.value}
         name="value"
         placeholder="Value"
         className="input rounded-none placeholder:text-gray-600 w-full input-bordered"
       />
-      <button
-        onClick={() => removeHeader(header.id)}
-        className="btn rounded-none btn-error"
-      >
-        <TrashIcon className="w-6 h-6" />
-      </button>
+      {!readOnly && (
+        <button
+          onClick={() => removeHeader(header.id)}
+          className="btn rounded-none btn-error"
+        >
+          <TrashIcon className="w-6 h-6" />
+        </button>
+      )}
     </form>
   );
 };

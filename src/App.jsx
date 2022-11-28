@@ -3,6 +3,9 @@ import Tab from "./components/Tab";
 import HeaderTab from "./components/HeaderTab";
 import RequestForm from "./components/RequestForm";
 import JSONTab from "./components/JSONTab";
+import { MutatingDots } from "react-loader-spinner";
+import Response from "./components/Response";
+import Credit from "./components/Credit";
 
 function generateUUID() {
   // Public Domain/MIT
@@ -29,10 +32,30 @@ function generateUUID() {
 
 function App() {
   const [activeOptionTab, setActiveOptionTab] = React.useState("Headers");
+  const [response, setResponse] = React.useState();
+  const [body, setBody] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+  const [headers, setHeaders] = React.useState([
+    {
+      key: "Content-Type",
+      value: "application/json",
+      id: generateUUID(),
+    },
+    {
+      key: "",
+      value: "",
+      id: generateUUID(),
+    },
+  ]);
 
   return (
     <main className="mx-auto py-10 max-w-xl">
-      <RequestForm />
+      <RequestForm
+        setResponse={setResponse}
+        setLoading={setLoading}
+        headers={headers}
+        body={body}
+      />
 
       <div className="tabs mt-6 w-fit tabs-boxed">
         <Tab
@@ -47,10 +70,34 @@ function App() {
         />
       </div>
       <HeaderTab
+        headers={headers}
+        setHeaders={setHeaders}
         activeOptionTab={activeOptionTab}
         generateUUID={generateUUID}
       />
-      <JSONTab activeOptionTab={activeOptionTab} />
+      <JSONTab
+        body={body}
+        setBody={setBody}
+        activeOptionTab={activeOptionTab}
+      />
+      {loading ? (
+        <>
+          <div className="w-full flex mt-6 justify-center">
+            <MutatingDots
+              height="100"
+              width="100"
+              color="#641ae6"
+              secondaryColor="#36d399"
+              radius="15"
+              ariaLabel="mutating-dots-loading"
+              visible={true}
+            />
+          </div>
+        </>
+      ) : (
+        response && <Response response={response} />
+      )}
+      <Credit />
     </main>
   );
 }

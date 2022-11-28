@@ -1,20 +1,60 @@
 import React from "react";
 import axios from "axios";
 
-const RequestForm = () => {
+axios.interceptors.request.use((request) => {
+  request.customData = request.customData || {};
+  request.customData.startTime = new Date();
+  return request;
+});
+
+axios.interceptors.response.use(updateEndTime, (e) => {
+  return Promise.reject(updateEndTime(e.response));
+});
+
+function updateEndTime(response) {
+  response.customData = response.customData || {};
+  response.customData.time =
+    new Date().getTime() - response.config.customData.startTime;
+  return response;
+}
+
+const RequestForm = ({ setLoading, body, headers, setResponse }) => {
   const [verb, setVerb] = React.useState("GET");
-  const [url, setUrl] = React.useState("");
+  const [url, setUrl] = React.useState(
+    "https://jsonplaceholder.typicode.com/posts/1"
+  );
   const sendRequest = async (e) => {
     e.preventDefault();
+    if (url === "") return;
+    body = null;
+    if (["POST", "PUT", "PATCH"].includes(verb.toUpperCase()))
+      try {
+        JSON.parse(body);
+        body = JSON.stringify(JSON.parse(body));
+      } catch (error) {
+        alert("Malformed JSON data");
+        return;
+      }
+    setLoading(true);
+
+    let reqHeaders = {};
+    for (let h of headers) {
+      if (h.key === "") continue;
+      reqHeaders[h.key] = h.value;
+    }
+    var res;
     try {
-      const response = await axios({
+      res = await axios({
         method: verb.toLowerCase(),
         url,
+        headers: reqHeaders,
+        data: body,
       });
-      console.log(response);
     } catch (error) {
-      console.error(error);
+      res = error;
     }
+    setResponse(res);
+    setLoading(false);
   };
 
   return (

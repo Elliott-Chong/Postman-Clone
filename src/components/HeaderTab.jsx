@@ -3,20 +3,7 @@ import KeyValuePair from "./KeyValuePair";
 import { PlusIcon } from "@heroicons/react/20/solid";
 import produce from "immer";
 
-const HeaderTab = ({ generateUUID, activeOptionTab }) => {
-  console.log(activeOptionTab);
-  const [headers, setHeaders] = React.useState([
-    {
-      key: "Content-Type",
-      value: "application/json",
-      id: generateUUID(),
-    },
-    {
-      key: "",
-      value: "",
-      id: generateUUID(),
-    },
-  ]);
+const HeaderTab = ({ headers, setHeaders, generateUUID, activeOptionTab }) => {
   const addHeader = () => {
     setHeaders(
       produce(headers, (draft) => {

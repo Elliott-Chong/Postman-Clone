@@ -9,12 +9,19 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@codemirror/lang-json": "^6.0.1",
     "@heroicons/react": "^2.0.13",
+    "@uiw/codemirror-extensions-basic-setup": "^4.15.1",
+    "@uiw/codemirror-extensions-color": "^4.15.1",
+    "@uiw/codemirror-theme-dracula": "^4.15.1",
+    "@uiw/react-codemirror": "^4.15.1",
     "axios": "^1.2.0",
     "daisyui": "^2.42.1",
     "immer": "^9.0.16",
+    "pretty-bytes": "^6.0.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-loader-spinner": "^5.3.4"
   },
   "devDependencies": {
     "@types/react": "^18.0.24",
